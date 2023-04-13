@@ -79,9 +79,11 @@ const actions = {
     commit('setUserInfo', res);
   },
   async logout({commit}) {
+    await ssoApi.logout();
     commit('removeToken');
     commit('removeUserData');
-    // commit('setUserInfo', InitUserInfo);
+    // const res = await ssoApi.logout();
+    // console.log(res)
   },
 
 };

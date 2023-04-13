@@ -5,7 +5,7 @@
         <t-card
           :bordered="false"
           title="出入库概览"
-          subtitle="(件)"
+          subtitle="(只)"
           :class="{ 'dashboard-overview-card': true, 'overview-panel': true }"
         >
           <template #actions>
@@ -32,7 +32,7 @@
           </template>
           <t-row>
             <t-col :xs="6" :xl="12">
-              <t-card :bordered="false" subtitle="本月出库总计（件）" class="inner-card">
+              <t-card :bordered="false" subtitle="本月出库总计（只）" class="inner-card">
                 <div class="inner-card__content">
                   <div class="inner-card__content-title">1726</div>
                   <div class="inner-card__content-footer">
@@ -43,7 +43,7 @@
               </t-card>
             </t-col>
             <t-col :xs="6" :xl="12">
-              <t-card :bordered="false" subtitle="本月入库总计（件）" class="inner-card">
+              <t-card :bordered="false" subtitle="本月入库总计（只）" class="inner-card">
                 <div class="inner-card__content">
                   <div class="inner-card__content-title">226</div>
                   <div class="inner-card__content-footer">

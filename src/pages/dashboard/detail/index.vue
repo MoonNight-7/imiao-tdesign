@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-detail">
-    <t-card title="本月采购申请情况" class="dashboard-detail-card" :bordered="false">
+    <t-card title="本月购猫申请情况" class="dashboard-detail-card" :bordered="false">
       <t-row :gutter="[16, 16]">
         <t-col v-for="(item, index) in PANE_LIST_DATA" :key="index" :xs="6" :xl="3">
           <t-card :class="['dashboard-list-card']" :description="item.title">
