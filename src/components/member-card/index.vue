@@ -3,7 +3,7 @@
     <template #avatar>
       <t-avatar size="56px">
         <template #icon>
-          {{ firstNickname }}
+          {{ member.nickname.charAt(0) }}
         </template>
       </t-avatar>
     </template>
@@ -16,7 +16,8 @@
     <template #content>
       <p class="list-card-item_detail--name">{{ member.nickname }}</p>
       <p class="list-card-item_detail--desc">入职时间：{{ member.gmtCreate || '2019-7-11' }}<br>
-        员工权限：{{ member.permissionName }}
+        员工权限：{{ member.permissionName }}<br>
+<!--        员工编号：{{ member.adminId }}-->
       </p>
     </template>
     <template #footer>

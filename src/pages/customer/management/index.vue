@@ -1,13 +1,15 @@
 <template>
-<div>我的客户</div>
+  <t-card :bordered="false">
+    <common-table />
+  </t-card>
 </template>
+<script lang="ts">
+import CommonTable from '../components/CommonTable.vue';
 
-<script>
 export default {
-  name: "index"
-}
+  name: 'CustomerManagement',
+  components: {
+    CommonTable,
+  },
+};
 </script>
-
-<style scoped>
-
-</style>

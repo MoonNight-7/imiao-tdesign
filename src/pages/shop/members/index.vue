@@ -133,7 +133,7 @@ export default {
       formVisible: false,
       textareaValue: '',
       rules: {
-        name: [{required: true, message: '请输入产品名称', type: 'error'}],
+        name: [{required: true, message: '请输入请假原因', type: 'error'}],
       },
       query: {...INITIAL_QUERY},
       confirmVisible: false, // 控制确认弹窗
