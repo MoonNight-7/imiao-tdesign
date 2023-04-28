@@ -90,8 +90,8 @@ import router from "@/router";
 
 const INITIAL_DATA = {
   phone: '',
-  username: 'root',
-  password: '123456',
+  username: '',
+  password: '',
   verifyCode: '',
   checked: false,
 };
