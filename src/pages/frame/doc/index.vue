@@ -19,7 +19,7 @@ export default {
     return {
       prefix,
       loading: true,
-      frameSrc: 'https://tdesign.tencent.com/starter/docs/vue/get-started',
+      frameSrc: 'http://moon-night.top/',
       settingStore: { ...STYLE_CONFIG },
       getWrapStyle: `height: ${window.innerHeight}px`,
     };

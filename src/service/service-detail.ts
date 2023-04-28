@@ -13,12 +13,12 @@ export const PANE_LIST_DATA: Array<DashboardPanel> = [
     upTrend: '10%',
   },
   {
-    title: '供应商数量（个）',
+    title: '猫厂数量（个）',
     number: '13',
     downTrend: '13%',
   },
   {
-    title: '采购商品品类（类）',
+    title: '出租猫咪品类（类）',
     number: '4',
     upTrend: '10%',
   },
@@ -41,17 +41,17 @@ export const PANE_LIST_DATA: Array<DashboardPanel> = [
 ];
 export const PRODUCT_LIST = [
   {
-    description: 'SSL证书又叫服务器证书，腾讯云为您提供证书的一站式服务，包括免费、付费证书的申请、管理及部',
+    description: '猫咪营养师认证是一项专门针对猫咪营养与健康领域的专业认证。通过该认证的专业人士将具备丰富的猫咪营养学知识，了解猫咪的生理需求、饮食搭配、疾病预防与管理等方面的专业知识。',
     index: 1,
     isSetup: true,
-    name: 'SSL证书',
+    name: '猫咪营养师认证',
     type: 4,
   },
   {
-    description: 'SSL证书又叫服务器证书，腾讯云为您提供证书的一站式服务，包括免费、付费证书的申请、管理及部',
+    description: '恶猫管理认证是一套针对恶猫公司员工的管理系统，旨在提高工作效率和数据安全性。通过这一认证系统，员工可以获得相应权限，从而访问和操作公司内部资源。',
     index: 1,
     isSetup: true,
-    name: 'SSL证书',
+    name: '恶猫管理认证',
     type: 4,
   },
 ];

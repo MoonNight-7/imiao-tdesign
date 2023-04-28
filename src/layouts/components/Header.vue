@@ -3,7 +3,8 @@
     <t-head-menu :class="menuCls" :theme="theme" expandType="popup" :value="active">
       <template #logo>
         <span v-if="showLogo" class="header-logo-container" @click="handleNav('/dashboard/base')">
-          <logo-full class="t-logo"/>
+<!--          <logo-full class="t-logo"/>-->
+          <span class="menu-logo-box" >{{getLogo}}</span>
         </span>
         <div v-else class="header-operate-left">
           <t-button theme="default" shape="square" variant="text" @click="changeCollapsed">
@@ -26,11 +27,11 @@
               <logo-github-icon/>
             </t-button>
           </t-tooltip>
-          <!--          <t-tooltip placement="bottom" content="帮助文档">-->
-          <!--            <t-button theme="default" shape="square" variant="text" @click="navToHelper">-->
-          <!--              <help-circle-icon />-->
-          <!--            </t-button>-->
-          <!--          </t-tooltip>-->
+<!--                    <t-tooltip placement="bottom" content="帮助文档">-->
+<!--                      <t-button theme="default" shape="square" variant="text" @click="navToHelper">-->
+<!--                        <help-circle-icon />-->
+<!--                      </t-button>-->
+<!--                    </t-tooltip>-->
           <t-dropdown :min-column-width="125" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
@@ -158,6 +159,14 @@ export default Vue.extend({
           [`${this.prefix}-header-menu-fixed-side-compact`]: this.layout === 'side' && this.isFixed && this.isCompact,
         },
       ];
+    },
+    getLogo() {
+      if (this.collapsed) {
+        // return Logo;
+        return "喵";
+      }
+      // return LogoFull;
+      return "iMiao后台管理平台";
     },
   },
   mounted() {
@@ -327,5 +336,13 @@ export default Vue.extend({
       margin-bottom: 8px;
     }
   }
+}
+.menu-logo-box {
+  display: flex;
+  font-size: 24px;
+  font-family: "MyCustomFont", sans-serif; // 使用 MyCustomFont 字体
+  font-weight: bold;
+  color: #409eff;
+  letter-spacing: 1px;
 }
 </style>

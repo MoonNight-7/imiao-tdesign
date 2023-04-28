@@ -5,7 +5,7 @@
         <div>
           Hi，{{adminDetail.姓名}}
           <span class="regular"> {{ greeting }}{{ daySince ? `，今天是你加入猫厂的第 ${daySince} 天~` : '' }}</span>
-          <t-button @click="initPermissionDetail">初始化权限信息</t-button>
+<!--          <t-button @click="initPermissionDetail">初始化权限信息</t-button>-->
         </div>
         <img style="width: 100px" src="https://media2.giphy.com/media/PyKQxHLNGpK1F3kI00/giphy.gif" class="logo"/>
       </div>
@@ -34,18 +34,19 @@
 <!--            <p>内容列表</p>-->
 <!--          </t-tab-panel>-->
           <t-tab-panel value="second" label="内容列表">
-            <t-card :bordered="false" title="主页访问数据" subtitle="77（次）">
-              <template #options>
-                <t-date-rang-picker
-                  class="card-date-picker-container"
-                  :default-value="LAST_7_DAYS"
-                  theme="primary"
-                  mode="date"
-                  @change="onLineChange"
-                />
-              </template>
-              <div id="lineContainer" style="width: 100%; height: 330px"/>
-            </t-card>
+            <result-maintenance/>
+<!--            <t-card :bordered="false" title="主页访问数据" subtitle="77（次）">-->
+<!--              <template #options>-->
+<!--                <t-date-rang-picker-->
+<!--                  class="card-date-picker-container"-->
+<!--                  :default-value="LAST_7_DAYS"-->
+<!--                  theme="primary"-->
+<!--                  mode="date"-->
+<!--                  @change="onLineChange"-->
+<!--                />-->
+<!--              </template>-->
+<!--              <div id="lineContainer" style="width: 100%; height: 330px"/>-->
+<!--            </t-card>-->
           </t-tab-panel>
 <!--          <t-tab-panel value="third" label="内容列表">-->
 <!--            <p>内容列表</p>-->
@@ -120,6 +121,7 @@ import ProductCIcon from '@/assets/assets-product-3.svg';
 import ProductDIcon from '@/assets/assets-product-4.svg';
 import custApi from "@/constants/api/imiao-cust/imiao-cust-api";
 import store from "@/store";
+import ResultMaintenance from "@/pages/result/maintenance/index.vue";
 
 echarts.use([GridComponent, TooltipComponent, LineChart, CanvasRenderer, LegendComponent]);
 
@@ -141,6 +143,7 @@ export default {
   name: 'UserIndex',
 
   components: {
+    ResultMaintenance,
     ProductAIcon,
     ProductBIcon,
     ProductCIcon,
@@ -159,6 +162,7 @@ export default {
       PRODUCT_LIST,
       adminDetail: {},
       daySince:'',
+      permissionId: '',
       permissionDetail:{},
     };
   },
@@ -186,8 +190,9 @@ export default {
       this.updateContainer();
     },
   },
-  mounted() {
-    this.initAdminDetail()
+  async mounted() {
+    await this.initAdminDetail()
+    await this.initPermissionDetail()
     window.addEventListener('resize', this.updateContainer, false);
     this.renderCharts();
     this.$nextTick(() => {
@@ -225,9 +230,7 @@ export default {
       return filteredData;
     },
     async initPermissionDetail() {
-      const admin = store.getters['user/userData'];
-      const id = admin.userId;
-      const res = await custApi.getPermissionDetail(id)
+      const res = await custApi.getPermissionDetail(this.permissionId);
       this.permissionDetail = res.data
       console.log(this.permissionDetail)
     },
@@ -235,10 +238,10 @@ export default {
       const admin = store.getters['user/userData'];
       const id = admin.userId;
       const res = await custApi.getAdminById(id);
+      this.permissionId = res.data.permissionId;
       this.adminDetail = this.filterData(res.data);
-      const createDate = res.data.gmtCreate.replace(/-/g,"/")
+      const createDate = res.data.gmtCreate ? res.data.gmtCreate.replace(/-/g,"/") : '';
       const date = new Date(createDate)
-      console.log(date)
       this.daySince = this.getDaysSince(createDate);
     },
     getDaysSince(dateStr) {

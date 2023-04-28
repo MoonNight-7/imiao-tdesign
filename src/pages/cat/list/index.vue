@@ -1,24 +1,20 @@
 <template>
-  <div>
-    猫咪列表
-    <t-button @click="test">获取用户信息</t-button>
-  </div>
+  <t-card :bordered="false">
+    <filter-table/>
+  </t-card>
 </template>
 
 <script>
-import ssoApi from "@/constants/api/imiao-sso/imiao-sso-api";
+
+import FilterTable from "@/pages/cat/components/FilterTable.vue";
 
 export default {
   name: "index",
+  components: {FilterTable},
   data() {
     return {}
   },
-  methods: {
-    async test() {
-      const userDetail = await ssoApi.userDetail();
-      console.log(userDetail)
-    }
-  }
+  methods: {}
 }
 </script>
 

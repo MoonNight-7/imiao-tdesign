@@ -64,7 +64,7 @@ instance.interceptors.response.use(
   response => {
     if (response.data.state === 200) {
       return Promise.resolve(response)
-    } else if (response.data.state >= 600) { // TODO: 此处应修改为状态码等于600时返回登录页
+    } else if (response.data.state === 401) { // TODO: 此处应修改为状态码等于600时返回登录页
       MessagePlugin.error('出错了')
       localStorage.clear()
       location.href = "/login"
@@ -126,18 +126,23 @@ export function POST(url, params) {
 }
 
 export function PUT(url, params) {
+  const formData = new URLSearchParams();
+  for (const key in params) {
+    formData.append(key, params[key]);
+  }
+
   return new Promise((resolve, reject) => {
     instance
-      .put(url, params)
+      .put(url, formData)
       .then(res => {
-        resolve(res.data)
+        resolve(res.data);
       })
       .catch(err => {
-        // console.log(err);
-        reject(err.data)
-      })
-  })
+        reject(err.data);
+      });
+  });
 }
+
 
 export function DELETE(url, params) {
   return new Promise((resolve, reject) => {

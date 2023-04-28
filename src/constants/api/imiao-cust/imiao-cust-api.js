@@ -1,4 +1,4 @@
-import {GET, POST, PUT} from "@/utils/my-request";
+import {DELETE, GET, POST, PUT} from "@/utils/my-request";
 
 
 const prefix = import.meta.env.VITE_CUST
@@ -42,8 +42,8 @@ const custApi = {
    * @author 邢展旗
    * @date 2023年04月15日 10:04:27
    */
-  enableAdmin(adminId) {
-    return PUT(`${prefix}/admin-info/set-disable`, adminId);
+  disableAdmin(adminId) {
+    return PUT(`${prefix}/admin-info/set-disable`, {adminId});
   },
   /**
    * @description: 获取管理员列表
@@ -70,10 +70,44 @@ const custApi = {
     };
     return GET(`${prefix}/admin-info/query-admins`, {params})
   },
+  /**
+   * @description: 新增用户(注册用户) * @param user 用户信息对象
+   * @author 邢展旗
+   * @date 2023年04月27日 11:04:54
+   */
   userAddNew(user) {
     return POST(`${prefix}/user-info/register`, user)
   },
-  quertUsers({pageNum, sizeNum, userId, nickname, enable}) {
+  /**
+   * @description: 删除用户(根据id)
+   * @author 邢展旗
+   * @date 2023年04月27日 11:04:59
+   */
+  deleteUser(userId) {
+    return DELETE(`${prefix}/user-info/delete-by-id`, {params: {userId}})
+  },
+  /**
+   * @description: 启用用户(根据id)
+   * @author 邢展旗
+   * @date 2023年04月27日 11:04:24
+   */
+  enableUser(userId) {
+    return PUT(`${prefix}/user-info/set-enable`, {userId})
+  },
+  /**
+   * @description: 禁用用户(根据id)
+   * @author 邢展旗
+   * @date 2023年04月27日 11:04:29
+   */
+  disableUser(userId) {
+    return PUT(`${prefix}/user-info/set-disable`, {userId})
+  },
+  /**
+   * @description: 获取用户列表(带搜索条件)
+   * @author 邢展旗
+   * @date 2023年04月27日 11:04:34
+   */
+  queryUsers({pageNum, sizeNum, userId, nickname, enable}) {
     const params = {
       pageNum,
       sizeNum,

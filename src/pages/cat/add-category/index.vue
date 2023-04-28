@@ -22,20 +22,28 @@
             </t-col>
 
             <t-col :span="4">
-              <t-form-item label="平均寿命" name="lifeExpectancy">
-                <t-input v-model="formData.lifeExpectancy" :style="{ width: '322px' }" placeholder="请输入内容"/>
+              <t-form-item label="平均寿命（年）" name="lifeExpectancy">
+                <t-input-number theme="column" :min="1" v-model="formData.lifeExpectancy" :style="{ width: '322px' }"
+                                placeholder="请输入内容"/>
               </t-form-item>
             </t-col>
 
             <t-col :span="4">
-              <t-form-item label="平均体重" name="averageWeight">
-                <t-input v-model="formData.averageWeight" :style="{ width: '322px' }" placeholder="请输入内容"/>
+              <t-form-item label="平均体重（公斤）" name="averageWeight">
+                <t-input-number theme="column" step="0.1" min="0" v-model="formData.averageWeight"
+                                :style="{ width: '322px' }" placeholder="请输入内容"/>
               </t-form-item>
             </t-col>
 
             <t-col :span="4">
               <t-form-item label="毛发长度（厘米）" name="coatLength">
-                <t-input v-model="formData.coatLength" :style="{ width: '322px' }" placeholder="请输入内容"/>
+                <t-range-input
+                  v-model="formData.coatLength"
+                  :style="{ width: '322px' }"
+                  :min="0"
+                  :max="100"
+                  placeholder="请输入内容"
+                />
               </t-form-item>
             </t-col>
 
@@ -74,8 +82,6 @@
       </div>
 
 
-
-
       <div class="form-submit-container">
         <div class="form-submit-sub">
           <div class="form-submit-left">
@@ -89,23 +95,36 @@
 </template>
 <script>
 import {prefix} from '@/config/global';
-import custApi from "@/constants/api/imiao-cust/imiao-cust-api";
 import countryList from '@surbowl/world-geo-json-zh/world.zh.json'
+import catApi from "@/constants/api/imiao-cat/imiao-cat-api";
 
 
 const INITIAL_DATA = {
   averageWeight: '',
-  coatLength: '',
+  coatLength: [],
   color: '',
   countryOfOrigin: '',
   lifeExpectancy: '',
-  speciesDescription:'',
-  speciesName:'',
-  temperament:'',
+  speciesDescription: '',
+  speciesName: '',
+  temperament: '',
 };
 const FORM_RULES = {
   averageWeight: [{required: true, message: '请输入平均体重', type: 'error'}],
-  coatLength: [{required: true, message: '请输入毛发长度', type: 'error'}],
+  coatLength: [
+    {
+      validator: (val) => {
+        if (!Array.isArray(val) || val.length !== 2) {
+          return { result: false, message: '请输入有效的毛发长度范围', type: 'error' };
+        }
+        const [min, max] = val.map(Number); // 将字符串值转换为数字
+        if (isNaN(min) || isNaN(max) || min < 0 || max > 100) {
+          return { result: false, message: '毛发长度范围应在 0-100 厘米之间', type: 'error' };
+        }
+        return true;
+      },
+    },
+  ],
   color: [{required: true, message: '请输入颜色', type: 'error'}],
   countryOfOrigin: [{required: true, message: '请选择起源地', type: 'error'}],
   lifeExpectancy: [{required: true, message: '请输入平均寿命', type: 'error'}],
@@ -121,32 +140,30 @@ export default {
       prefix,
       stepSuccess: true,
       formData: {...INITIAL_DATA},
+      coatLengthArr: '',
       FORM_RULES,
-      permissionOptions: [
-        {label: '超管', value: '1'},
-        {label: '普通', value: '2'},
-        {label: '类型C', value: '3'},
-      ],
       textareaValue: '',
-
-
       selectedCountry: '',
       countryOptions: countryList.features.map(feature => ({
         label: feature.properties.name,
-        value: feature.properties.iso_a3
+        value: feature.properties.name
       })),
 
     };
   },
+  computed: {
+    coatLength: {
+      get() {
+        return this.formData.coatLength;
+      },
+      set(value) {
+        this.formData.coatLength = value.map(Number);
+      },
+    },
+  },
   mounted() {
-    this.initPermissionList();
   },
   methods: {
-    async initPermissionList() {
-      const res = await custApi.getPermissionList();
-      this.permissionOptions = res.data
-    },
-
     changeStatus() {
       this.stepSuccess = !this.stepSuccess;
     },
@@ -155,11 +172,22 @@ export default {
     },
     async onSubmit({validateResult}) {
       if (validateResult === true) {
-        // const res = await custApi.adminAddNew(this.formData)
-        // if (res.state === 200) {
-        //   this.$message.success('新建成功！')
-        //   this.formData = {...INITIAL_DATA};
-        // }
+        // 将 coatLength 数组转换为所需的字符串格式
+        const coatLengthString = this.formData.coatLength.join('~');
+
+        // 创建一个新的对象，包含转换后的 coatLength 字段
+        const requestData = {
+          ...this.formData,
+          coatLength: coatLengthString,
+        };
+
+        console.log(requestData);
+
+        const res = await catApi.addSpecies(requestData);
+        if (res.state === 200) {
+          await this.$message.success('新建成功！');
+          this.formData = {...INITIAL_DATA};
+        }
       }
     },
   },

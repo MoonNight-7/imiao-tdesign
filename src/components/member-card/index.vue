@@ -33,7 +33,7 @@
     </template>
     <template #actions>
       <t-dropdown
-        :disabled="member.enable == 0 || member.adminId == 1"
+        :disabled=" member.adminId == 1"
         trigger="click"
         :options="[
           {
@@ -48,7 +48,7 @@
           },
         ]"
       >
-        <t-button theme="default" :disabled="member.enable == 0  || member.adminId == 1" shape="square" variant="text">
+        <t-button theme="default" :disabled="member.adminId == 1" shape="square" variant="text">
           <more-icon/>
         </t-button>
       </t-dropdown>

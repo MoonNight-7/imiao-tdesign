@@ -14,6 +14,12 @@ export default [
         component: () => import('@/pages/user/index.vue'),
         meta: { title: '个人中心' },
       },
+      {
+        path: 'secondary',
+        name: 'DetailSecondary',
+        component: () => import('@/pages/detail/secondary/index.vue'),
+        meta: {title: '消息通知'},
+      },
     ],
   },
   {

@@ -83,6 +83,21 @@
           <a class="t-button-link" @click="handleClickDelete(slotProps)">删除</a>
         </template>
       </t-table>
+      <t-dialog header="客户信息管理" :visible.sync="formVisible" :width="680" :footer="false">
+        <div slot="body">
+          <!-- 表单内容 -->
+          <t-form :data="formData" ref="form" @submit="handleUpdateUserInfo" :labelWidth="100">
+            <t-form-item label="用户状态" name="enable">
+              <t-switch size="large" v-model="userIsEnable" :label="['启用', '禁用']" :customValue="[1,0]"/>
+            </t-form-item>
+            <t-form-item style="float: right">
+              <t-button variant="outline" @click="onClickCloseBtn">取消</t-button>
+              <t-button theme="primary" type="submit">确定</t-button>
+            </t-form-item>
+          </t-form>
+        </div>
+      </t-dialog>
+
       <t-dialog
         header="确认删除当前所选用户？"
         :body="confirmBody"
@@ -127,11 +142,8 @@ export default {
       CONTRACT_TYPE_OPTIONS,
       CONTRACT_PAYMENT_TYPES,
       prefix,
-      formData: {
-        nickname: '',
-        userId: undefined,
-        enable: undefined,
-      },
+      formData: {},
+      userIsEnable:1,
       query: {...INITIAL_QUERY},
       data: [],
       dataLoading: false,
@@ -191,7 +203,11 @@ export default {
         defaultCurrent: 1,
       },
       confirmVisible: false,
+      formVisible: false,
       deleteIdx: -1,
+      deleteUserId: '',
+      deleteDisabled: false,
+      rules:{},
     };
   },
   computed: {
@@ -212,7 +228,7 @@ export default {
   },
   methods: {
     initCustomerData() {
-      custApi.quertUsers(this.query).then((res) => {
+      custApi.queryUsers(this.query).then((res) => {
         this.data = res.data.list;
         this.pagination = {
           ...this.pagination,
@@ -230,7 +246,7 @@ export default {
     },
     onSubmit() {
       console.log(this.query);
-      custApi.quertUsers(this.query).then((res) => {
+      custApi.queryUsers(this.query).then((res) => {
         this.data = res.data.list;
         this.pagination = {
           ...this.pagination,
@@ -249,8 +265,28 @@ export default {
     },
     rehandleClickOp({text, row}) {
       console.log(text, row);
+      this.formData.userId = row.userId;
+      this.userIsEnable = row.enable;
+      this.formVisible = true;
+    },
+    handleUpdateUserInfo(){
+      if (this.userIsEnable === 1) {
+        custApi.enableUser(this.formData.userId).then((res) => {
+          this.$message.success('启用成功');
+        })
+      } else {
+        custApi.disableUser(this.formData.userId).then((res) => {
+          this.$message.success('禁用成功');
+        })
+      }
+    },
+    onClickCloseBtn() {
+      this.formVisible = false;
+      this.formData = {};
     },
     handleClickDelete(row) {
+      const {userId} = row.row;
+      this.deleteUserId = userId;
       this.deleteIdx = row.rowIndex;
       this.confirmVisible = true;
     },
@@ -259,7 +295,9 @@ export default {
       this.data.splice(this.deleteIdx, 1);
       this.pagination.total = this.data.length;
       this.confirmVisible = false;
-      this.$message.success('删除成功');
+      custApi.deleteUser(this.deleteUserId).then((res) => {
+        this.$message.success('删除成功');
+      })
       this.resetIdx();
     },
     onCancel() {
@@ -304,4 +342,5 @@ export default {
 .t-button + .t-button {
   margin-left: var(--td-comp-margin-s);
 }
+
 </style>

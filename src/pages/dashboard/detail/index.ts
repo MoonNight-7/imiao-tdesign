@@ -87,7 +87,7 @@ export function getScatterDataSet({
       left: 'center',
       bottom: '0',
       orient: 'horizontal', // legend 横向布局。
-      data: ['按摩仪', '咖啡机'],
+      data: ['布偶猫', '英短'],
       itemHeight: 8,
       itemWidth: 8,
       textStyle: {
@@ -97,13 +97,13 @@ export function getScatterDataSet({
     },
     series: [
       {
-        name: '按摩仪',
+        name: '布偶猫',
         symbolSize: 10,
         data: outArray.reverse(),
         type: 'scatter',
       },
       {
-        name: '咖啡机',
+        name: '英短',
         symbolSize: 10,
         data: inArray.concat(inArray.reverse()),
         type: 'scatter',
@@ -135,7 +135,7 @@ export function getFolderLineDataSet({
       left: 'center',
       bottom: '0',
       orient: 'horizontal', // legend 横向布局。
-      data: ['杯子', '茶叶', '蜂蜜', '面粉'],
+      data: ['暹罗猫', '茶杯猫', '困困猫', '奇怪的猫咪'],
       textStyle: {
         fontSize: 12,
         color: placeholderColor,
@@ -174,7 +174,7 @@ export function getFolderLineDataSet({
         showSymbol: true,
         symbol: 'circle',
         symbolSize: 8,
-        name: '杯子',
+        name: '暹罗猫',
         stack: '总量',
         data: [
           getRandomArray(),
@@ -197,7 +197,7 @@ export function getFolderLineDataSet({
         showSymbol: true,
         symbol: 'circle',
         symbolSize: 8,
-        name: '茶叶',
+        name: '茶杯猫',
         stack: '总量',
         data: [
           getRandomArray(),
@@ -220,7 +220,7 @@ export function getFolderLineDataSet({
         showSymbol: true,
         symbol: 'circle',
         symbolSize: 8,
-        name: '蜂蜜',
+        name: '困困猫',
         stack: '总量',
         data: [
           getRandomArray(),
@@ -243,7 +243,7 @@ export function getFolderLineDataSet({
         showSymbol: true,
         symbol: 'circle',
         symbolSize: 8,
-        name: '面粉',
+        name: '奇怪的猫咪',
         stack: '总量',
         data: [
           getRandomArray(),
