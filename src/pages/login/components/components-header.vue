@@ -1,6 +1,6 @@
 <template>
   <header class="login-header">
-    <logo-full-icon class="logo" />
+    <span class="logo">MOON-NIGHT</span>
     <div class="operations-container">
       <t-button theme="default" shape="square" variant="text" @click="navToGitHub">
         <logo-github-icon class="icon" />
@@ -47,8 +47,12 @@ export default {
   color: var(--td-text-color-primary);
 
   .logo {
-    width: 188px;
-    height: var(--td-comp-size-xxxl);
+    display: flex;
+    font-size: 36px;
+    font-family: "MyCustomFont", sans-serif; // 使用 MyCustomFont 字体
+    font-weight: bold;
+    color: #151552;
+    letter-spacing: 1px;
   }
 
   .operations-container {
