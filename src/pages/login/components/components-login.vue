@@ -8,7 +8,7 @@
     @submit="onSubmit"
   >
     <template v-if="type == 'password'">
-      <t-form-item name="account">
+      <t-form-item name="username">
         <t-input v-model="formData.username" size="large" placeholder="请输入账号">
           <template #prefix-icon>
             <user-icon/>
@@ -90,8 +90,8 @@ import router from "@/router";
 
 const INITIAL_DATA = {
   phone: '',
-  username: 'root',
-  password: '123456',
+  username: '',
+  password: '',
   verifyCode: '',
   checked: false,
 };
