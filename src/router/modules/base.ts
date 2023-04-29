@@ -3,26 +3,26 @@ import Layout from '@/layouts/index.vue';
 
 export default [
   {
-    path: '/dashboard',
+    path: '/home',
     component: Layout,
-    redirect: '/dashboard/base',
+    redirect: '/home/recommend',
     name: 'dashboard',
     meta: {
-      title: '仪表盘',
+      title: '推荐',
       icon: DashboardIcon,
     },
     children: [
       {
         path: 'base',
         name: 'DashboardBase',
-        component: () => import('@/pages/dashboard/base/index.vue'),
-        meta: { title: '概览仪表盘' },
+        component: () => import('@/pages/recommend/index.vue'),
+        meta: { title: '官方推荐' },
       },
       {
         path: 'detail',
         name: 'DashboardDetail',
         component: () => import('@/pages/dashboard/detail/index.vue'),
-        meta: { title: '统计报表' },
+        meta: { title: '个人推荐' },
       },
     ],
   },

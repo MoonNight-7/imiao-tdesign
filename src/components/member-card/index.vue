@@ -39,7 +39,7 @@
           {
             content: '管理',
             value: 'manage',
-            onClick: () => handleManagemember(member),
+            onClick: () => handleManageMember(member),
           },
           {
             content: '开除',
@@ -84,7 +84,7 @@ export default {
     this.spliceNickname(this.member)
   },
   methods: {
-    handleManagemember(member) {
+    handleManageMember(member) {
       this.$emit('manage-product', member);
     },
     handleDeleteItem(member) {

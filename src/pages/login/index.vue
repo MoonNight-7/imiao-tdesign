@@ -6,6 +6,12 @@
       <div class="title-container">
         <h1 class="title margin-no">欢迎您</h1>
         <h1 class="title">开启租猫之旅</h1>
+        <div class="sub-title">
+          <p class="tip">{{ type === 'register' ? '已有账号?' : '没有账号吗?' }}</p>
+          <p class="tip" @click="switchType(type == 'register' ? 'login' : 'register')">
+            {{ type === 'register' ? '登录' : '注册新账号' }}
+          </p>
+        </div>
       </div>
 
       <login v-if="type === 'login'" />

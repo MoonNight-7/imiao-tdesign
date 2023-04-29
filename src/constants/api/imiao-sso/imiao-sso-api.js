@@ -9,7 +9,7 @@ const ssoApi = {
    * @date 2023年04月11日 22:04:22
    */
   login(user) {
-    return POST(`${prefix}/admin/sso/login`, user)
+    return POST(`${prefix}/user/sso/login`, user)
   },
   /**
    * @description: 登出接口
@@ -17,7 +17,7 @@ const ssoApi = {
    * @date 2023年04月12日 00:04:02
    */
   logout() {
-    return POST(`${prefix}/admin/sso/logout`)
+    return POST(`${prefix}/user/sso/logout`)
   },
   /**
    * @description: 用户详情获取

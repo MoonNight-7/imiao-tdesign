@@ -166,7 +166,7 @@ export default Vue.extend({
         return "喵";
       }
       // return LogoFull;
-      return "iMiao后台管理平台";
+      return "iMiao在线租猫平台";
     },
   },
   mounted() {
