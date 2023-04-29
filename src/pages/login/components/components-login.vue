@@ -128,9 +128,7 @@ export default {
   },
   methods: {
     test() {
-      ssoApi.userDetail().then(res => {
-        console.log(res)
-      })
+      this.$message.info('请联系管理员邢展旗！！')
     },
     switchType(val) {
       this.type = val;

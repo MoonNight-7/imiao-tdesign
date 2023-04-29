@@ -5,9 +5,9 @@
       <t-button theme="default" shape="square" variant="text" @click="navToGitHub">
         <logo-github-icon class="icon" />
       </t-button>
-      <t-button theme="default" shape="square" variant="text" @click="navToHelper">
-        <help-circle-icon class="icon" />
-      </t-button>
+<!--      <t-button theme="default" shape="square" variant="text" @click="navToHelper">-->
+<!--        <help-circle-icon class="icon" />-->
+<!--      </t-button>-->
       <t-button theme="default" shape="square" variant="text" @click="toggleSettingPanel">
         <setting-icon class="icon" />
       </t-button>
@@ -23,7 +23,7 @@ export default {
   components: { LogoFullIcon, LogoGithubIcon, HelpCircleIcon, SettingIcon },
   methods: {
     navToGitHub() {
-      window.open('https://github.com/Tencent/tdesign-vue-starter');
+      window.open('https://github.com/MoonNight-7');
     },
     navToHelper() {
       window.open('https://tdesign.tencent.com/starter/docs/get-started');
