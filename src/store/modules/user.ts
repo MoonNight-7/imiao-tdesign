@@ -14,6 +14,7 @@ const state = {
     ...InitUserInfo,
     userData: JSON.parse(localStorage.getItem("userData")) || {},
   },
+  topUpVisible:false
 };
 
 const mutations = {
@@ -36,6 +37,12 @@ const mutations = {
     localStorage.clear();
     state.userInfo = {}
     console.log('清除用户信息成功！')
+  },
+  turnOnTopUpVisible(state){
+    state.topUpVisible = true
+  },
+  turnOffTopUpVisible(state){
+    state.topUpVisible = false
   }
 };
 
@@ -43,6 +50,7 @@ const getters = {
   token: (state) => state.token,
   roles: (state) => state.userInfo?.roles,
   userData: (state) => state.userInfo?.userData,
+  topUpVisible: (state) => state.topUpVisible
 };
 
 const actions = {
@@ -88,7 +96,17 @@ const actions = {
     // const res = await ssoApi.logout();
     // console.log(res)
   },
-
+  turnUpTopUpVisible({commit}){
+    commit('turnOnTopUpVisible')
+  },
+  turnDownTopUpVisible({commit}){
+    commit('turnOffTopUpVisible')
+  },
+  refreshUserDetail({commit}){
+    ssoApi.userDetail().then(res=>{
+      commit('setUserData', res.data);
+    })
+  }
 };
 
 export default {

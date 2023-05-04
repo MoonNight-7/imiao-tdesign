@@ -3,9 +3,9 @@ import Layout from '@/layouts/index.vue';
 
 export default [
   {
-    path: '/home',
+    path: '/recommend',
     component: Layout,
-    redirect: '/home/recommend',
+    redirect: '/recommend/system',
     name: 'dashboard',
     meta: {
       title: '推荐',
@@ -13,15 +13,15 @@ export default [
     },
     children: [
       {
-        path: 'base',
-        name: 'DashboardBase',
-        component: () => import('@/pages/recommend/index.vue'),
+        path: 'system',
+        name: 'RecommendSystem',
+        component: () => import('@/pages/recommend/system/index.vue'),
         meta: { title: '官方推荐' },
       },
       {
-        path: 'detail',
-        name: 'DashboardDetail',
-        component: () => import('@/pages/dashboard/detail/index.vue'),
+        path: 'personal',
+        name: 'RecommendPersonal',
+        component: () => import('@/pages/recommend/personal/index.vue'),
         meta: { title: '个人推荐' },
       },
     ],

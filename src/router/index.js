@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import baseRouters from './modules/base';
 import componentsRouters from './modules/components';
 import othersRouters from './modules/others';
+import unvisiable from "@/router/modules/unvisiable";
 
 const env = import.meta.env.MODE || 'development';
 
@@ -18,9 +19,10 @@ const defaultRouterList = [
   },
   {
     path: '*',
-    redirect: '/home/base',
+    redirect: '/recommend/system',
   },
   ...asyncRouterList,
+  ...unvisiable
 ];
 
 const createRouter = () =>

@@ -28,26 +28,26 @@
             <template v-if="!route.isHome">
               {{ route.title }}
             </template>
-            <home-icon v-else />
+            <home-icon v-else/>
             <template #dropdown>
               <t-dropdown-menu>
                 <t-dropdown-item @click="() => handleRefresh(route.path, idx)">
-                  <refresh-icon />
+                  <refresh-icon/>
                   刷新
                 </t-dropdown-item>
                 <t-dropdown-item v-if="idx > 0" @click="() => handleCloseAhead(route.path, idx)">
-                  <arrow-left-icon />
+                  <arrow-left-icon/>
                   关闭左侧
                 </t-dropdown-item>
                 <t-dropdown-item
                   v-if="idx < tabRouterList.length - 1"
                   @click="() => handleCloseBehind(route.path, idx)"
                 >
-                  <arrow-right-icon />
+                  <arrow-right-icon/>
                   关闭右侧
                 </t-dropdown-item>
                 <t-dropdown-item @click="() => handleCloseOther(route.path, idx)">
-                  <close-circle-icon />
+                  <close-circle-icon/>
                   关闭其它
                 </t-dropdown-item>
               </t-dropdown-menu>
@@ -56,31 +56,46 @@
         </template>
       </t-tab-panel>
     </t-tabs>
+
+    <t-dialog
+      :visible.sync="visible"
+      width="600"
+      confirmBtn="支付完成"
+      cancelBtn="关闭"
+      :onConfirm="onConfirm"
+    >
+      <top-up @qrcode-updated="updateQrcode"/>
+    </t-dialog>
+
     <t-content :class="`${prefix}-content-layout`">
-      <layout-breadcrumb v-if="setting.showBreadcrumb" />
-      <common-content />
+      <layout-breadcrumb v-if="setting.showBreadcrumb"/>
+      <common-content/>
     </t-content>
     <t-footer v-if="showFooter" :class="`${prefix}-footer-layout`">
-      <layout-footer />
+      <layout-footer/>
     </t-footer>
   </t-layout>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
-import { RefreshIcon, ArrowLeftIcon, ArrowRightIcon, HomeIcon, CloseCircleIcon } from 'tdesign-icons-vue';
+import {mapGetters} from 'vuex';
+import {RefreshIcon, ArrowLeftIcon, ArrowRightIcon, HomeIcon, CloseCircleIcon} from 'tdesign-icons-vue';
 
 import CommonContent from './Content.vue';
 import LayoutBreadcrumb from './Breadcrumb.vue';
 import LayoutFooter from './Footer.vue';
 
-import { prefix } from '@/config/global';
-import { SettingType } from '@/interface';
+import {prefix} from '@/config/global';
+import {SettingType} from '@/interface';
+import store from "@/store";
+import TopUp from "@/components/top-up/index.vue";
+import catApi from "@/constants/api/imiao-cat/imiao-cat-api";
 
 export default Vue.extend({
   name: 'LayoutContent',
   components: {
+    TopUp,
     CommonContent,
     LayoutFooter,
     LayoutBreadcrumb,
@@ -94,6 +109,7 @@ export default Vue.extend({
     return {
       prefix,
       activeTabPath: '',
+      balance: 0,
     };
   },
   computed: {
@@ -107,12 +123,21 @@ export default Vue.extend({
     setting(): SettingType {
       return this.$store.state.setting;
     },
+    visible: {
+      get() {
+        return store.getters['user/topUpVisible'];
+      },
+      set(val) {
+        console.log(val)
+        store.dispatch('user/turnDownTopUpVisible')
+      },
+    },
   },
   methods: {
     handleRemove(path: string, routeIdx: number) {
       const nextRouter = this.tabRouterList[routeIdx + 1] || this.tabRouterList[routeIdx - 1];
 
-      this.$store.commit('tabRouter/subtractCurrentTabRouter', { path, routeIdx });
+      this.$store.commit('tabRouter/subtractCurrentTabRouter', {path, routeIdx});
       if (path === this.$router.history?.current?.path) {
         this.$router.push(nextRouter.path);
       }
@@ -124,20 +149,20 @@ export default Vue.extend({
       this.$store.commit('tabRouter/toggleTabRouterAlive', routeIdx);
       this.$nextTick(() => {
         this.$store.commit('tabRouter/toggleTabRouterAlive', routeIdx);
-        this.$router.replace({ path: currentPath });
+        this.$router.replace({path: currentPath});
       });
       this.activeTabPath = null;
     },
     handleCloseAhead(path: string, routeIdx: number) {
-      this.$store.commit('tabRouter/subtractTabRouterAhead', { path, routeIdx });
+      this.$store.commit('tabRouter/subtractTabRouterAhead', {path, routeIdx});
       this.handleOperationEffect('ahead', routeIdx);
     },
     handleCloseBehind(path: string, routeIdx: number) {
-      this.$store.commit('tabRouter/subtractTabRouterBehind', { path, routeIdx });
+      this.$store.commit('tabRouter/subtractTabRouterBehind', {path, routeIdx});
       this.handleOperationEffect('behind', routeIdx);
     },
     handleCloseOther(path: string, routeIdx: number) {
-      this.$store.commit('tabRouter/subtractTabRouterOther', { path, routeIdx });
+      this.$store.commit('tabRouter/subtractTabRouterOther', {path, routeIdx});
       this.handleOperationEffect('other', routeIdx);
     },
     handleOperationEffect(type: 'other' | 'ahead' | 'behind', routeIndex: number) {
@@ -162,6 +187,23 @@ export default Vue.extend({
     handleTabMenuClick(visible: boolean, ctx, path: string) {
       if (ctx?.trigger === 'document') this.activeTabPath = null;
       if (visible) this.activeTabPath = path;
+    },
+    onConfirm() {
+      this.visible = false;
+      const userId = store.getters['user/userData'].userId;
+      const {balance} = this;
+      const params = {
+        userId,
+        balance,
+      };
+      console.log(params)
+      catApi.recharge(params).then((res) => {
+        this.$message.success('支付成功，金额会自动充值到账户中');
+        console.log(res)
+      });
+    },
+    updateQrcode(qrcode) {
+      this.balance = qrcode
     },
   },
 });

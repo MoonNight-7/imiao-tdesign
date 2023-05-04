@@ -12,12 +12,20 @@ const catApi = {
     return POST(`${prefix}/cat-species/add-new`, species)
   },
   /**
+   * @description: 根据ID获取品种详情(根据id查询详情)
+   * @author 邢展旗
+   * @date 2023年05月04日 00:05:30
+   */
+  getSpeciesById(id) {
+    return GET(`${prefix}/cat-species/get-by-id`, {params: {id}})
+  },
+  /**
    * @description: 获取品种列表
    * @author 邢展旗
    * @date 2023年04月22日 00:04:32
    */
   getSpeciesList(name) {
-    return GET(`${prefix}/cat-species/get-by-name`, name)
+    return GET(`${prefix}/cat-species/get-by-name`, {params: {name}})
   },
   /**
    * @description: 获取品种详情(根据id)
@@ -92,6 +100,14 @@ const catApi = {
     return PUT(`${prefix}/cat-info/set-unavailable/${catId}`)
   },
   /**
+   * @description: 获取猫咪信息详情(根据id查询详情)
+   * @author 邢展旗
+   * @date 2023年05月03日 01:05:57
+   */
+  getCatInfoDetail(catId) {
+    return GET(`${prefix}/cat-info/get/${catId}`)
+  },
+  /**
    * @description: 获取猫咪信息列表(分页查询)
    * @author 邢展旗
    * @date 2023年04月28日 16:04:45
@@ -123,6 +139,33 @@ const catApi = {
       pageSize,
     };
     return GET(`${prefix}/cat-info/query-list`, {params})
+  },
+  recharge(userMoney) {
+    return POST(`${prefix}/user-money/recharge`, userMoney)
+  },
+  createOrder(order){
+    return POST(`${prefix}/order/create-order`,order)
+  },
+  payOrder(orderId){
+    return PUT(`${prefix}/order/update-order`, {orderId})
+  },
+  getOrderList({
+    orderStatus,
+    orderId,
+    catId,
+    userId,
+    pageNum,
+    pageSize,
+  }){
+    const params ={
+      orderStatus,
+      orderId,
+      catId,
+      userId,
+      pageNum,
+      pageSize,
+    }
+    return GET(`${prefix}/order/get-order-list`, {params})
   }
 }
 export default catApi;

@@ -4,7 +4,7 @@
       <template #logo>
         <span v-if="showLogo" class="header-logo-container" @click="handleNav('/dashboard/base')">
 <!--          <logo-full class="t-logo"/>-->
-          <span class="menu-logo-box" >{{getLogo}}</span>
+          <span class="menu-logo-box">{{ getLogo }}</span>
         </span>
         <div v-else class="header-operate-left">
           <t-button theme="default" shape="square" variant="text" @click="changeCollapsed">
@@ -17,28 +17,49 @@
       <template #operations>
         <div class="operations-container">
           <!-- 搜索框 -->
-          <search v-if="layout !== 'side'" :layout="layout"/>
+          <!--          <search v-if="layout !== 'side'" :layout="layout"/>-->
 
           <!-- 全局通知 -->
-          <notice/>
+          <!--          <notice/>-->
 
           <t-tooltip placement="bottom" content="代码仓库">
             <t-button theme="default" shape="square" variant="text" @click="navToGitHub">
               <logo-github-icon/>
             </t-button>
           </t-tooltip>
-<!--                    <t-tooltip placement="bottom" content="帮助文档">-->
-<!--                      <t-button theme="default" shape="square" variant="text" @click="navToHelper">-->
-<!--                        <help-circle-icon />-->
-<!--                      </t-button>-->
-<!--                    </t-tooltip>-->
           <t-dropdown :min-column-width="125" trigger="click">
             <template #dropdown>
               <t-dropdown-menu>
-                <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">
-                  <user-circle-icon/>
-                  个人中心
+                <t-dropdown-item class="operations-dropdown-container-item"
+                                 @click="store.dispatch('user/turnUpTopUpVisible')">
+                  <qrcode-icon/>
+                  我要充值
                 </t-dropdown-item>
+                <t-dropdown-item class="operations-dropdown-container-item"
+                                 @click="refreshBalance">
+                  <refresh-icon/>
+                  刷新余额
+                </t-dropdown-item>
+              </t-dropdown-menu>
+            </template>
+            <t-button class="header-user-btn" theme="default" variant="text">
+              <template #icon>
+                <creditcard-icon class="header-user-avatar"/>
+              </template>
+              <div class="header-user-account">账户余额：￥{{ balance}}
+              </div>
+              <template #suffix>
+                <chevron-down-icon/>
+              </template>
+            </t-button>
+          </t-dropdown>
+          <t-dropdown :min-column-width="125" trigger="click">
+            <template #dropdown>
+              <t-dropdown-menu>
+                <!--                <t-dropdown-item class="operations-dropdown-container-item" @click="handleNav('/user/index')">-->
+                <!--                  <user-circle-icon/>-->
+                <!--                  个人中心-->
+                <!--                </t-dropdown-item>-->
                 <t-dropdown-item class="operations-dropdown-container-item" @click="handleLogout">
                   <poweroff-icon/>
                   退出登录
@@ -69,6 +90,9 @@
 <script>
 import Vue from 'vue';
 import {
+  RefreshIcon,
+  CreditcardIcon,
+  QrcodeIcon,
   ViewListIcon,
   LogoGithubIcon,
   HelpCircleIcon,
@@ -84,15 +108,19 @@ import Notice from './Notice.vue';
 import Search from './Search.vue';
 import MenuContent from './MenuContent.vue';
 import ssoApi from "@/constants/api/imiao-sso/imiao-sso-api";
+import store from "@/store";
 
 export default Vue.extend({
   components: {
+    RefreshIcon,
     MenuContent,
     LogoFull,
     Notice,
     Search,
+    QrcodeIcon,
     ViewListIcon,
     LogoGithubIcon,
+    CreditcardIcon,
     HelpCircleIcon,
     UserCircleIcon,
     PoweroffIcon,
@@ -134,6 +162,9 @@ export default Vue.extend({
     };
   },
   computed: {
+    store() {
+      return store
+    },
     active() {
       if (!this.$route.path) {
         return '';
@@ -143,6 +174,9 @@ export default Vue.extend({
         .filter((item, index) => index <= this.maxLevel && index > 0)
         .map((item) => `/${item}`)
         .join('');
+    },
+    balance(){
+      return (Math.floor(this.userData.balance * 100) / 100).toFixed(2)
     },
     showMenu() {
       return !(this.layout === 'mix' && this.showLogo === 'side');
@@ -194,6 +228,12 @@ export default Vue.extend({
     initUserData() {
       this.userData = JSON.parse(localStorage.getItem('userData'));
     },
+    refreshBalance(){
+      store.dispatch('user/refreshUserDetail')
+      const u = store.getters['user/userData'].balance
+      // console.log(u)
+      this.userData.balance = u;
+    }
   }
 });
 </script>
@@ -337,6 +377,7 @@ export default Vue.extend({
     }
   }
 }
+
 .menu-logo-box {
   display: flex;
   font-size: 24px;
